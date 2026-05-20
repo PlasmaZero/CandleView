@@ -1,0 +1,81 @@
+# CandleView configuration
+
+# Symbols to scan on each loop
+tickers:
+  - AAPL
+  - MSFT
+  - NVDA
+  - TSLA
+  - SPY
+  - QQQ
+  - AMD
+  - META
+
+# Data layer
+data:
+  interval: "5m"        # 1m, 5m, 15m, 1h
+  lookback_days: 5
+  options_provider: "yfinance"   # "yfinance" or "tradier"
+  rate_limit_per_minute: 60
+
+# Strategy configuration
+strategies:
+  momentum_breakout:
+    enabled: true
+    resistance_lookback: 20
+    volume_multiplier: 1.5     # volume must exceed 1.5x avg
+    ema_fast: 9
+    ema_slow: 21
+    ema_trend: 50
+    rsi_min: 50
+    rsi_max: 75
+    atr_stop_multiplier: 1.5
+    target_r_multiple: 2.0
+
+  options_flow:
+    enabled: true
+    volume_oi_ratio_min: 2.0   # vol/OI ratio threshold for "unusual"
+    iv_percentile_min: 60      # IV in upper third
+    min_premium: 0.10
+    max_premium: 10.0
+    days_to_expiry_min: 1
+    days_to_expiry_max: 14
+
+# Filters
+filters:
+  market_hours_only: true
+  market_open_et: "09:30"
+  market_close_et: "16:00"
+  min_avg_volume: 500000
+  skip_earnings_window_days: 2
+
+# Risk management
+risk:
+  account_value: 25000.0
+  max_risk_per_trade_pct: 1.0
+  max_daily_loss_pct: 3.0
+  max_concurrent_positions: 5
+  position_sizing: "fixed_fractional"   # "fixed_fractional" or "kelly"
+  kelly_fraction: 0.25                  # use 1/4 Kelly to reduce variance
+
+# Execution
+broker:
+  name: "alpaca"        # "alpaca" or "tradier"
+  paper: true
+  default_order_type: "limit"
+  limit_offset_pct: 0.05
+
+# Storage
+storage:
+  sqlite_path: "data/trades.sqlite"
+  csv_path: "data/trades.csv"
+
+# Dashboard
+dashboard:
+  type: "terminal"      # "terminal" or "web"
+  refresh_seconds: 5
+  web_port: 8000
+
+# Scheduler
+scheduler:
+  scan_interval_seconds: 60
