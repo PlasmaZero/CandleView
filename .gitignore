@@ -17,8 +17,8 @@ htmlcov/
 build/
 dist/
 
-# CandleView runtime artifacts
-data/
+# CandleView runtime artifacts (only at repo root, not the source package)
+/data/
 logs/
 *.sqlite
 *.db
